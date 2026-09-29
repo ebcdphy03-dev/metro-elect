@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Electricity Keywords — Flashcards | Grade 6</title>
+<style>
+  :root {
+    --copper: #B87333;
+    --gold: #D4AF37;
+    --board-green: #0B3D2E;
+    --board-green-light: #145C43;
+    --navy: #0F172A;
+    --cream: #FDF6E3;
+    --text-dark: #1a1a1a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'Trebuchet MS', sans-serif;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(212,175,55,0.08), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(212,175,55,0.08), transparent 40%),
+      var(--board-green);
+    background-attachment: fixed;
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px 50px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* Circuit trace background pattern */
+  .traces {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+  h1 {
+    z-index: 1;
+    font-size: 28px;
+    margin: 6px 0 2px;
+    text-align: center;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+  .subtitle {
+    z-index: 1;
+    color: #cfe8dc;
+    font-size: 14px;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .deck-wrap {
+    z-index: 1;
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .progress-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--gold);
+  }
+  .progress-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    margin: 0 12px;
+    overflow: hidden;
+    border: 1px solid rgba(212,175,55,0.4);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--copper), var(--gold));
+    width: 6.66%;
+    transition: width 0.3s ease;
+  }
+  .card-scene {
+    width: 100%;
+    max-width: 560px;
+    height: 320px;
+    perspective: 1400px;
+    margin-bottom: 20px;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0.2,0.2,1);
+    outline: none;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    border: 3px solid var(--gold);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 0 40px rgba(212,175,55,0.08);
+  }
+  .card-face.front {
+    background: linear-gradient(160deg, #0F172A 0%, #16233d 100%);
+  }
+  .card-face.back {
+    background: linear-gradient(160deg, var(--board-green-light) 0%, var(--board-green) 100%);
+    transform: rotateY(180deg);
+  }
+  .chip-decor {
+    position: absolute;
+    width: 34px; height: 14px;
+    background: #222;
+    border: 2px solid var(--gold);
+    border-radius: 3px;
+    opacity: 0.55;
+  }
+  .chip-decor.tl { top: 14px; left: 14px; }
+  .chip-decor.br { bottom: 14px; right: 14px; }
+  .card-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.8;
+  }
+  .term-text {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .def-text {
+    font-size: 18px;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .flip-hint {
+    font-size: 12px;
+    color: rgba(253,246,227,0.55);
+    margin-top: 18px;
+    font-style: italic;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .nav-btn {
+    background: linear-gradient(160deg, var(--copper), #8a5320);
+    color: var(--cream);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  }
+  .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.3); }
+  .nav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+  .nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  }
+  .shuffle-btn {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 14px;
+  }
+  .shuffle-btn:hover { background: rgba(212,175,55,0.12); }
+  .keyboard-note {
+    margin-top: 18px;
+    font-size: 12px;
+    color: rgba(253,246,227,0.5);
+    text-align: center;
+  }
+  @media (max-width: 480px) {
+    .term-text { font-size: 26px; }
+    .def-text { font-size: 15px; }
+    .card-scene { height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="traces" viewBox="0 0 1200 800" preserveAspectRatio="none">
+  <g stroke="#D4AF37" stroke-width="2" fill="none">
+    <path d="M0,100 H200 V250 H500" />
+    <path d="M1200,150 H950 V350 H700" />
+    <path d="M0,600 H150 V500 H450" />
+    <path d="M1200,650 H1000 V450 H750" />
+    <path d="M100,0 V80 H350 V180" />
+    <path d="M1100,800 V700 H900 V600" />
+  </g>
+  <g fill="#D4AF37">
+    <circle cx="200" cy="100" r="5" />
+    <circle cx="500" cy="250" r="5" />
+    <circle cx="950" cy="150" r="5" />
+    <circle cx="700" cy="350" r="5" />
+    <circle cx="150" cy="600" r="5" />
+    <circle cx="450" cy="500" r="5" />
+    <circle cx="1000" cy="650" r="5" />
+    <circle cx="750" cy="450" r="5" />
+  </g>
+</svg>
+
+<h1>⚡ Electricity Keywords Flashcards</h1>
+<div class="subtitle">Grade 6 &middot; Chapter 9: Electricity &middot; Steam Ahead with Science - 6</div>
+
+<div class="deck-wrap">
+  <div class="progress-row">
+    <span id="progressLabel">Card 1 of 15</span>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <span id="masteredLabel">0 flipped</span>
+  </div>
+
+  <div class="card-scene">
+    <div class="card" id="card" tabindex="0" role="button" aria-label="Flashcard, press space or click to flip">
+      <div class="card-face front">
+        <div class="chip-decor tl"></div>
+        <div class="chip-decor br"></div>
+        <div class="card-label">Term</div>
+        <div class="term-text" id="termText">Loading...</div>
+        <div class="flip-hint">Click, tap, or press Space / Enter to flip</div>
+      </div>
+      <div class="card-face back">
+        <div class="chip-decor tl"></div>
+        <div class="chip-decor br"></div>
+        <div class="card-label">Definition</div>
+        <div class="def-text" id="defText"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn">&larr; Prev</button>
+    <button class="nav-btn" id="flipBtn">Flip Card</button>
+    <button class="nav-btn" id="nextBtn">Next &rarr;</button>
+  </div>
+  <button class="shuffle-btn" id="shuffleBtn">🔀 Shuffle Deck</button>
+  <div class="keyboard-note">Keyboard shortcuts: ← / → to move between cards &nbsp;|&nbsp; Space or Enter to flip</div>
+</div>
+
+<script>
+  const KEYWORDS = [{"term": "Closed Circuit", "definition": "An electric circuit in which the path is complete, allowing current to flow continuously from the power source to the load and back."}, {"term": "Conductor", "definition": "A material, such as copper or aluminium, that allows electric current to flow through it easily."}, {"term": "Electric Cell", "definition": "A device that produces electricity through a chemical reaction; used to power small devices such as torches and remote controls."}, {"term": "Electric Circuit", "definition": "The complete path through which electric current flows, consisting of a power source, conducting wires, and a device such as a bulb."}, {"term": "Electric Shock", "definition": "A sudden and potentially dangerous passage of electric current through the body, usually caused by touching a live or exposed conductor."}, {"term": "Electric Switch", "definition": "A device used to turn the flow of electricity in a circuit on or off by opening or closing the path of current."}, {"term": "Electricity", "definition": "A form of energy that flows through circuits and powers devices such as lights, fans, and household appliances."}, {"term": "Filament", "definition": "A thin coiled wire inside an electric bulb that heats up and glows brightly when electric current passes through it, producing light."}, {"term": "Insulator", "definition": "A material, such as rubber, plastic, wood, or glass, that does not allow electric current to pass through it."}, {"term": "Open Circuit", "definition": "An electric circuit in which the path of current is blocked or broken, preventing current from flowing and the connected device from working."}, {"term": "Power Station", "definition": "A facility, usually located on the outskirts of cities, where electricity is generated before being transmitted to homes and industries."}, {"term": "Reflector", "definition": "A curved, shiny part placed behind a torch's bulb that redirects and focuses light in a specific direction, making objects appear brighter."}, {"term": "Transformer", "definition": "A device that changes electricity so that it can be carried safely over long distances or used at different stages of its journey to homes."}, {"term": "Transistor", "definition": "A semiconductor device that can amplify or switch electronic signals; used in devices such as computers, radios, and televisions."}, {"term": "Transmission Tower", "definition": "A tall steel structure that supports power lines and helps carry electric current over long distances from power stations to towns and cities."}]
+;
+
+  var deck = KEYWORDS.map(function(k, i) {
+    return { term: k.term, definition: k.definition, id: i };
+  });
+  var currentIndex = 0;
+  var flippedSet = {};
+  var flippedCount = 0;
+  var isFlipped = false;
+
+  var cardEl = document.getElementById('card');
+  var termText = document.getElementById('termText');
+  var defText = document.getElementById('defText');
+  var progressLabel = document.getElementById('progressLabel');
+  var progressFill = document.getElementById('progressFill');
+  var masteredLabel = document.getElementById('masteredLabel');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var flipBtn = document.getElementById('flipBtn');
+  var shuffleBtn = document.getElementById('shuffleBtn');
+
+  function renderCard() {
+    var item = deck[currentIndex];
+    termText.textContent = item.term;
+    defText.textContent = item.definition;
+    isFlipped = false;
+    cardEl.classList.remove('flipped');
+
+    progressLabel.textContent = 'Card ' + (currentIndex + 1) + ' of ' + deck.length;
+    progressFill.style.width = (((currentIndex + 1) / deck.length) * 100) + '%';
+    masteredLabel.textContent = flippedCount + ' flipped';
+
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === deck.length - 1;
+  }
+
+  function flipCard() {
+    isFlipped = !isFlipped;
+    cardEl.classList.toggle('flipped', isFlipped);
+    if (isFlipped) {
+      var id = deck[currentIndex].id;
+      if (!flippedSet[id]) {
+        flippedSet[id] = true;
+        flippedCount++;
+      }
+      masteredLabel.textContent = flippedCount + ' flipped';
+    }
+  }
+
+  function goNext() {
+    if (currentIndex < deck.length - 1) {
+      currentIndex++;
+      renderCard();
+    }
+  }
+
+  function goPrev() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      renderCard();
+    }
+  }
+
+  function shuffleDeck() {
+    for (var i = deck.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = deck[i];
+      deck[i] = deck[j];
+      deck[j] = tmp;
+    }
+    currentIndex = 0;
+    renderCard();
+  }
+
+  cardEl.addEventListener('click', flipCard);
+  cardEl.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      flipCard();
+    } else if (e.code === 'ArrowRight') {
+      goNext();
+    } else if (e.code === 'ArrowLeft') {
+      goPrev();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (document.activeElement === cardEl) return; // handled above
+    if (e.code === 'ArrowRight') goNext();
+    else if (e.code === 'ArrowLeft') goPrev();
+    else if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); flipCard(); }
+  });
+
+  prevBtn.addEventListener('click', goPrev);
+  nextBtn.addEventListener('click', goNext);
+  flipBtn.addEventListener('click', flipCard);
+  shuffleBtn.addEventListener('click', shuffleDeck);
+
+  renderCard();
+  cardEl.focus();
+</script>
+
+</body>
+</html>
